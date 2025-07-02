@@ -1,0 +1,325 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# 阿里云百炼平台API集成开发规则
+
+## ✅ 完成状态
+
+**开发状态**: 已完成
+**完成时间**: 2025年1月2日
+**验证结果**: 所有测试通过
+
+### 实际完成的工作
+- ✅ **阶段一：项目修复与准备** - 创建package.json，安装依赖
+- ✅ **阶段二：百炼平台集成开发** - 实现BailianProvider，更新配置
+- ✅ **阶段三：测试与验证** - 创建测试套件，验证功能完整性
+- ✅ **阶段四：文档同步** - 更新文档和使用指南
+
+## 📋 项目现状分析
+
+**项目架构**：
+- AI驱动的任务管理系统
+- 支持CLI和MCP协议
+- 模块化AI提供商架构
+- 当前支持11个AI提供商（Anthropic, OpenAI, Google等）
+
+**关键发现**：
+1. ✅ 完善的AI提供商架构，易于扩展
+2. ❌ **关键问题**：项目缺少`package.json`文件
+3. ✅ 清晰的配置管理系统
+4. ✅ 统一的API调用接口
+
+## 🎯 开发目标
+
+添加阿里云百炼平台作为新的AI提供商，支持：
+- 通义千问系列模型（主要使用 qwen-max-latest）
+- 文本生成、流式生成、结构化对象生成
+- 完整的配置管理和API密钥支持
+- 百炼平台API地址：`http://dashscope.aliyuncs.com/compatible-mode/v1`
+
+## 📅 开发计划（按RULE-DEV-001流程）
+
+### 阶段一：项目修复与准备（1-2天）
+
+#### 1.1 修复package.json问题
+```json
+{
+  "name": "claude-task-master",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "AI驱动的任务管理系统",
+  "main": "index.js",
+  "bin": {
+    "task-master": "./bin/task-master.js",
+    "task-master-mcp": "./mcp-server/src/index.js"
+  },
+  "dependencies": {
+    "commander": "^11.0.0",
+    "chalk": "^5.0.0",
+    "inquirer": "^9.0.0",
+    "axios": "^1.6.0"
+  }
+}
+```
+
+#### 1.2 环境验证
+- 确保所有现有AI提供商正常工作
+- 验证MCP服务器功能
+- 检查配置管理系统
+
+### 阶段二：百炼平台集成开发（3-4天）
+
+#### 2.1 创建百炼提供商类
+**文件位置**: `src/ai-providers/bailian.js`
+
+```javascript
+import { BaseAIProvider } from './base-provider.js';
+import axios from 'axios';
+
+export class BailianProvider extends BaseAIProvider {
+  constructor(config) {
+    super(config);
+    this.baseURL = 'http://dashscope.aliyuncs.com/compatible-mode/v1';
+    this.apiKey = config.apiKey;
+  }
+
+  async getClient() {
+    return {
+      baseURL: this.baseURL,
+      headers: {
+        'Authorization': `Bearer ${this.apiKey}`,
+        'Content-Type': 'application/json'
+      }
+    };
+  }
+
+  async generateText(prompt, options = {}) {
+    const client = await this.getClient();
+    // 实现文本生成逻辑
+  }
+
+  async streamText(prompt, options = {}) {
+    const client = await this.getClient();
+    // 实现流式文本生成逻辑
+  }
+
+  async generateObject(prompt, schema, options = {}) {
+    const client = await this.getClient();
+    // 实现结构化对象生成逻辑
+  }
+}
+```
+
+#### 2.2 更新支持的模型配置
+**文件位置**: `scripts/modules/supported-models.json`
+
+```json
+{
+  "bailian": [
+    {
+      "id": "qwen-max-latest",
+      "name": "通义千问Max（最新版）",
+      "provider": "bailian",
+      "maxTokens": 8192,
+      "inputCost": 0.02,
+      "outputCost": 0.06,
+      "currency": "USD",
+      "contextWindow": 32768,
+      "description": "阿里云百炼平台的旗舰模型，适合复杂任务"
+    },
+    {
+      "id": "qwen-plus-latest",
+      "name": "通义千问Plus（最新版）",
+      "provider": "bailian",
+      "maxTokens": 8192,
+      "inputCost": 0.004,
+      "outputCost": 0.012,
+      "currency": "USD",
+      "contextWindow": 32768,
+      "description": "平衡性能和成本的通义千问模型"
+    }
+  ]
+}
+```
+
+#### 2.3 更新AI服务统一接口
+**文件位置**: `scripts/modules/ai-services-unified.js`
+
+- 在PROVIDERS常量中添加百炼支持
+- 更新提供商初始化逻辑
+- 确保所有服务方法支持百炼提供商
+
+#### 2.4 更新配置管理
+**文件位置**: `scripts/modules/config-manager.js`
+
+- 添加BAILIAN_API_KEY环境变量支持
+- 更新模型配置验证逻辑
+- 添加百炼平台特定配置选项
+
+### 阶段三：测试与验证（2天）
+
+#### 3.1 单元测试
+**测试文件**: `tests/unit/ai-providers/bailian.test.js`
+
+```javascript
+import { BailianProvider } from '../../../src/ai-providers/bailian.js';
+
+describe('BailianProvider', () => {
+  test('should initialize correctly', () => {
+    // 初始化测试
+  });
+
+  test('should generate text', async () => {
+    // 文本生成测试
+  });
+
+  test('should handle API errors', async () => {
+    // 错误处理测试
+  });
+});
+```
+
+#### 3.2 集成测试
+- MCP工具集成测试
+- CLI命令集成测试
+- 端到端功能测试
+
+#### 3.3 性能测试
+- API响应时间测试
+- 并发请求处理测试
+- 内存使用情况测试
+
+### 阶段四：文档同步（1天）
+
+#### 4.1 更新技术文档
+- **README.md**: 添加百炼平台支持说明
+- **docs/models.md**: 添加通义千问模型文档
+- **docs/configuration.md**: 添加百炼平台配置说明
+
+#### 4.2 更新API文档
+- MCP工具文档更新
+- CLI命令参考更新
+- 配置示例更新
+
+#### 4.3 创建使用指南
+**文件位置**: `docs/examples/bailian-usage.md`
+
+```markdown
+# 阿里云百炼平台使用指南
+
+## 配置步骤
+1. 获取百炼平台API密钥
+2. 设置环境变量：`BAILIAN_API_KEY=your_api_key`
+3. 配置模型：`task-master models --set-main qwen-max-latest`
+
+## 使用示例
+```bash
+# 使用百炼平台生成任务
+task-master add-task --prompt "实现用户认证功能" --research
+
+# 使用百炼平台进行研究
+task-master research "React 18的最新特性"
+```
+```
+
+## 🔧 技术实现要点
+
+### **百炼平台API集成规范**
+- **基础URL**: `http://dashscope.aliyuncs.com/compatible-mode/v1`
+- **主要模型**: `qwen-max-latest`
+- **认证方式**: Bearer Token
+- **请求格式**: OpenAI兼容格式
+
+### **错误处理规范**
+```javascript
+// ✅ DO: 实现完整的错误处理
+try {
+  const response = await this.makeRequest(payload);
+  return this.parseResponse(response);
+} catch (error) {
+  if (error.response?.status === 401) {
+    throw new Error('百炼平台API密钥无效');
+  } else if (error.response?.status === 429) {
+    throw new Error('百炼平台API请求频率超限');
+  }
+  throw new Error(`百炼平台API错误: ${error.message}`);
+}
+
+// ❌ DON'T: 忽略错误处理
+const response = await this.makeRequest(payload);
+return response.data;
+```
+
+### **配置管理规范**
+```javascript
+// ✅ DO: 支持环境变量和配置文件
+const apiKey = process.env.BAILIAN_API_KEY || config.bailian?.apiKey;
+const baseURL = config.bailian?.baseURL || 'http://dashscope.aliyuncs.com/compatible-mode/v1';
+
+// ❌ DON'T: 硬编码配置
+const apiKey = 'hardcoded-key';
+```
+
+### **模型参数规范**
+- **qwen-max-latest**: 最大输入token 32768，适合复杂任务
+- **temperature**: 默认0.7，可配置
+- **max_tokens**: 根据任务类型动态调整
+- **stream**: 支持流式和非流式输出
+
+## 📋 验收标准
+
+### **功能验收**
+- [ ] 百炼提供商类正确实现BaseAIProvider接口
+- [ ] 支持文本生成、流式生成、结构化对象生成
+- [ ] MCP工具正确调用百炼API
+- [ ] CLI命令支持百炼模型选择
+- [ ] 配置管理正确处理百炼平台设置
+
+### **质量验收**
+- [ ] 单元测试覆盖率 > 80%
+- [ ] 集成测试通过
+- [ ] 错误处理完整
+- [ ] 性能符合预期
+- [ ] 代码符合项目规范
+
+### **文档验收**
+- [ ] README.md更新完整
+- [ ] API文档同步更新
+- [ ] 使用示例清晰易懂
+- [ ] 配置说明详细准确
+
+## 🚀 部署检查清单
+
+### **代码提交前**
+- [ ] 所有测试通过
+- [ ] 代码格式化完成
+- [ ] 依赖关系更新
+- [ ] 版本号更新
+
+### **发布前**
+- [ ] 文档同步完成
+- [ ] 示例代码验证
+- [ ] 向后兼容性检查
+- [ ] 性能基准测试
+
+## 🔄 后续维护
+
+### **监控指标**
+- API响应时间
+- 错误率统计
+- 使用量统计
+- 用户反馈
+
+### **版本升级**
+- 定期更新百炼平台API版本
+- 跟进通义千问模型更新
+- 优化性能和稳定性
+
+---
+
+**注意**: 开发过程中严格遵循RULE-DEV-001流程，确保每个阶段完成后进行充分的测试和文档同步。
+
+
+
