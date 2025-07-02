@@ -34,31 +34,31 @@ function generateInternalComplexityAnalysisPrompt(
 	gatheredContext = ''
 ) {
 	const tasksString = JSON.stringify(tasksData.tasks, null, 2);
-	let prompt = `Analyze the following tasks to determine their complexity (1-10 scale) and recommend the number of subtasks for expansion. Provide a brief reasoning and an initial expansion prompt for each.
+	let prompt = `分析以下任务，确定其复杂度（1-10分制）并推荐扩展的子任务数量。为每个任务提供简要的推理和初始扩展提示。
 
-Tasks:
+任务：
 ${tasksString}`;
 
 	if (gatheredContext) {
-		prompt += `\n\n# Project Context\n\n${gatheredContext}`;
+		prompt += `\n\n# 项目上下文\n\n${gatheredContext}`;
 	}
 
 	prompt += `
 
-Respond ONLY with a valid JSON array matching the schema:
+仅使用符合以下架构的有效JSON数组进行响应：
 [
   {
-    "taskId": <number>,
-    "taskTitle": "<string>",
-    "complexityScore": <number 1-10>,
-    "recommendedSubtasks": <number>,
-    "expansionPrompt": "<string>",
-    "reasoning": "<string>"
+    "taskId": <数字>,
+    "taskTitle": "<字符串>",
+    "complexityScore": <数字 1-10>,
+    "recommendedSubtasks": <数字>,
+    "expansionPrompt": "<字符串>",
+    "reasoning": "<字符串>"
   },
   ...
 ]
 
-Do not include any explanatory text, markdown formatting, or code block markers before or after the JSON array.`;
+不要在JSON数组之前或之后包含任何解释性文本、markdown格式或代码块标记。`;
 	return prompt;
 }
 
@@ -401,7 +401,7 @@ async function analyzeTaskComplexity(options, context = {}) {
 			gatheredContext
 		);
 		const systemPrompt =
-			'You are an expert software architect and project manager analyzing task complexity. Respond only with the requested valid JSON array.';
+			'你是一个专业的软件架构师和项目经理，正在分析任务复杂度。仅使用请求的有效JSON数组进行响应。';
 
 		let loadingIndicator = null;
 		if (outputFormat === 'text') {
@@ -518,9 +518,9 @@ async function analyzeTaskComplexity(options, context = {}) {
 							taskTitle: missingTask.title,
 							complexityScore: 5,
 							recommendedSubtasks: 3,
-							expansionPrompt: `Break down this task with a focus on ${missingTask.title.toLowerCase()}.`,
+							expansionPrompt: `分解这个任务，重点关注${missingTask.title.toLowerCase()}。`,
 							reasoning:
-								'Automatically added due to missing analysis in AI response.'
+								'由于AI响应中缺少分析而自动添加。'
 						});
 					}
 				}

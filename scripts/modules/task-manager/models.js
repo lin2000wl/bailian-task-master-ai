@@ -523,6 +523,24 @@ async function setModel(role, modelId, options = {}) {
 					determinedProvider = CUSTOM_PROVIDERS.VERTEX;
 					warningMessage = `Warning: Custom Vertex AI model '${modelId}' set. Please ensure the model is valid and accessible in your Google Cloud project.`;
 					report('warn', warningMessage);
+				} else if (providerHint === CUSTOM_PROVIDERS.BAILIAN) {
+					// Bailian provider - check if model exists in our list
+					determinedProvider = CUSTOM_PROVIDERS.BAILIAN;
+					// Re-find modelData specifically for bailian provider
+					const bailianModels = availableModels.filter(
+						(m) => m.provider === 'bailian'
+					);
+					const bailianModelData = bailianModels.find(
+						(m) => m.id === modelId
+					);
+					if (bailianModelData) {
+						// Update modelData to the found bailian model
+						modelData = bailianModelData;
+						report('info', `Setting Bailian model '${modelId}'.`);
+					} else {
+						warningMessage = `Warning: Bailian model '${modelId}' not found in supported models. Setting without validation.`;
+						report('warn', warningMessage);
+					}
 				} else {
 					// Invalid provider hint - should not happen with our constants
 					throw new Error(`Invalid provider hint received: ${providerHint}`);
@@ -543,7 +561,7 @@ async function setModel(role, modelId, options = {}) {
 					success: false,
 					error: {
 						code: 'MODEL_NOT_FOUND_NO_HINT',
-						message: `Model ID "${modelId}" not found in Taskmaster's supported models. If this is a custom model, please specify the provider using --openrouter, --ollama, --bedrock, --azure, or --vertex.`
+						message: `Model ID "${modelId}" not found in Taskmaster's supported models. If this is a custom model, please specify the provider using --openrouter, --ollama, --bedrock, --azure, --vertex, or --bailian.`
 					}
 				};
 			}

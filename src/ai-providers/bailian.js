@@ -11,7 +11,7 @@ export class BailianProvider extends BaseAIProvider {
 	constructor() {
 		super();
 		this.name = 'Bailian';
-		this.baseURL = 'http://dashscope.aliyuncs.com/compatible-mode/v1';
+		this.baseURL = 'https://dashscope.aliyuncs.com/compatible-mode/v1';
 	}
 
 	/**

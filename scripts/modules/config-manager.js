@@ -39,24 +39,24 @@ try {
 const DEFAULTS = {
 	models: {
 		main: {
-			provider: 'anthropic',
-			modelId: 'claude-3-7-sonnet-20250219',
-			maxTokens: 64000,
-			temperature: 0.2
-		},
+		provider: 'bailian',
+		modelId: 'qwen-max-latest',
+		maxTokens: 16384,
+		temperature: 0.2
+	},
 		research: {
-			provider: 'perplexity',
-			modelId: 'sonar-pro',
-			maxTokens: 8700,
-			temperature: 0.1
-		},
+		provider: 'bailian',
+		modelId: 'qwen-max-latest',
+		maxTokens: 16384,
+		temperature: 0.2
+	},
 		fallback: {
-			// No default fallback provider/model initially
-			provider: 'anthropic',
-			modelId: 'claude-3-5-sonnet',
-			maxTokens: 8192, // Default parameters if fallback IS configured
-			temperature: 0.2
-		}
+		// No default fallback provider/model initially
+		provider: 'bailian',
+		modelId: 'qwen-max-latest',
+		maxTokens: 16384, // Default parameters if fallback IS configured
+		temperature: 0.2
+	}
 	},
 	global: {
 		logLevel: 'info',
@@ -65,7 +65,8 @@ const DEFAULTS = {
 		defaultPriority: 'medium',
 		projectName: 'Task Master',
 		ollamaBaseURL: 'http://localhost:11434/api',
-		bedrockBaseURL: 'https://bedrock.us-east-1.amazonaws.com'
+		bedrockBaseURL: 'https://bedrock.us-east-1.amazonaws.com',
+		bailianBaseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'
 	}
 };
 
@@ -402,6 +403,11 @@ function getAzureBaseURL(explicitRoot = null) {
 function getBedrockBaseURL(explicitRoot = null) {
 	// Directly return value from config
 	return getGlobalConfig(explicitRoot).bedrockBaseURL;
+}
+
+function getBailianBaseURL(explicitRoot = null) {
+	// Directly return value from config
+	return getGlobalConfig(explicitRoot).bailianBaseURL;
 }
 
 /**
@@ -837,6 +843,7 @@ export {
 	getOllamaBaseURL,
 	getAzureBaseURL,
 	getBedrockBaseURL,
+	getBailianBaseURL,
 	getParametersForRole,
 	getUserId,
 	// API Key Checkers (still relevant)

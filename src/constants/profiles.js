@@ -25,14 +25,7 @@
  * 3. Export it as {profile}Profile in src/profiles/index.js
  */
 export const RULE_PROFILES = [
-	'claude',
-	'cline',
-	'codex',
-	'cursor',
-	'roo',
-	'trae',
-	'vscode',
-	'windsurf'
+	'cursor'
 ];
 
 /**

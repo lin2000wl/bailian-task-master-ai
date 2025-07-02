@@ -1,12 +1,12 @@
 {
 	"meta": {
-		"generatedAt": "2025-05-27T16:34:53.088Z",
-		"tasksAnalyzed": 1,
-		"totalTasks": 84,
-		"analysisCount": 45,
+		"generatedAt": "2025-07-02T23:39:45.430Z",
+		"tasksAnalyzed": 5,
+		"totalTasks": 5,
+		"analysisCount": 50,
 		"thresholdScore": 5,
 		"projectName": "Taskmaster",
-		"usedResearch": true
+		"usedResearch": false
 	},
 	"complexityAnalysis": [
 		{
@@ -368,6 +368,46 @@
 			"recommendedSubtasks": 10,
 			"expansionPrompt": "Break down the implementation of the GitHub Issue Export Feature into detailed subtasks covering: command structure and CLI integration, GitHub API client development, authentication and error handling, task-to-issue mapping logic, content formatting and markdown conversion, bidirectional linking and metadata management, extensible architecture and adapter interfaces, configuration and settings management, documentation, and comprehensive testing (unit, integration, edge cases, performance).",
 			"reasoning": "This task involves designing and implementing a robust, extensible export system with deep integration into GitHub, including bidirectional workflows, complex data mapping, error handling, and support for future platforms. The requirements span CLI design, API integration, content transformation, metadata management, extensibility, configuration, and extensive testing. The breadth and depth of these requirements, along with the need for maintainability and future extensibility, place this task at a high complexity level. Breaking it into at least 10 subtasks will ensure each major component and concern is addressed systematically, reducing risk and improving quality."
+		},
+		{
+			"taskId": 1,
+			"taskTitle": "设置项目仓库",
+			"complexityScore": 4,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "初始化前端和后端代码库，配置基础目录结构，添加README文档。",
+			"reasoning": "此任务涉及多个技术栈（React和Node.js），但使用自动化工具（如create-react-app和Express生成器）可以降低复杂度。推荐扩展为：创建前端项目、创建后端项目、编写README文档。"
+		},
+		{
+			"taskId": 2,
+			"taskTitle": "集成MongoDB数据库",
+			"complexityScore": 6,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "安装mongoose，创建数据库连接模块，设计用户Schema，测试数据库连接。",
+			"reasoning": "需要熟悉MongoDB和mongoose的使用，并确保开发环境中的连接稳定性。推荐扩展为：安装依赖、实现连接逻辑、定义数据模型、验证连接。"
+		},
+		{
+			"taskId": 3,
+			"taskTitle": "实现用户注册功能",
+			"complexityScore": 7,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "开发前端表单，实现后端API，处理密码加密，存储用户数据，测试注册流程。",
+			"reasoning": "涉及前后端协作、数据验证、密码安全等多个方面，复杂度较高。推荐扩展为：设计前端表单、开发后端接口、实现密码加密、存储数据、测试功能。"
+		},
+		{
+			"taskId": 4,
+			"taskTitle": "实现用户登录与身份验证",
+			"complexityScore": 8,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "开发登录接口，实现JWT生成与验证，前端存储令牌，测试身份验证逻辑。",
+			"reasoning": "身份验证是系统安全性的重要部分，需确保逻辑严谨且无漏洞。推荐扩展为：开发登录接口、生成JWT、验证凭据、前端存储令牌、保护路由、全面测试。"
+		},
+		{
+			"taskId": 5,
+			"taskTitle": "开发仪表盘页面",
+			"complexityScore": 6,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "设计仪表盘UI，开发后端API，获取用户数据，优化页面性能。",
+			"reasoning": "需要结合前后端开发，同时关注用户体验和性能优化。推荐扩展为：设计UI布局、开发后端API、获取个性化数据、优化加载时间。"
 		}
 	]
 }

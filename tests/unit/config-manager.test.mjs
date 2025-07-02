@@ -61,10 +61,10 @@ const MOCK_CONFIG_PATH = path.join(MOCK_PROJECT_ROOT, '.taskmasterconfig');
 const DEFAULT_CONFIG = {
 	models: {
 		main: {
-			provider: 'anthropic',
-			modelId: 'claude-3-7-sonnet-20250219',
-			maxTokens: 64000,
-			temperature: 0.2
+			provider: 'bailian',
+			modelId: 'qwen-max-latest',
+			maxTokens: 8192,
+			temperature: 0.7
 		},
 		research: {
 			provider: 'perplexity',

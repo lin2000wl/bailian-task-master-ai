@@ -69,6 +69,12 @@ export function registerModelsTool(server) {
 				.optional()
 				.describe(
 					'Indicates the set model ID is a custom Google Vertex AI model.'
+				),
+			bailian: z
+				.boolean()
+				.optional()
+				.describe(
+					'Indicates the set model ID is a custom Alibaba Cloud Bailian model.'
 				)
 		}),
 		execute: withNormalizedProjectRoot(async (args, { log, session }) => {

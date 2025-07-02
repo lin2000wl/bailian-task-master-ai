@@ -186,55 +186,53 @@ Your task breakdown should incorporate this research, resulting in more detailed
 			: '';
 
 		// Base system prompt for PRD parsing
-		const systemPrompt = `You are an AI assistant specialized in analyzing Product Requirements Documents (PRDs) and generating a structured, logically ordered, dependency-aware and sequenced list of development tasks in JSON format.${researchPromptAddition}
+		const systemPrompt = `你是一个专门分析产品需求文档（PRD）并生成结构化、逻辑有序、依赖感知和排序的开发任务列表的AI助手，输出格式为JSON。${researchPromptAddition}
 
-Analyze the provided PRD content and generate approximately ${numTasks} top-level development tasks. If the complexity or the level of detail of the PRD is high, generate more tasks relative to the complexity of the PRD
-Each task should represent a logical unit of work needed to implement the requirements and focus on the most direct and effective way to implement the requirements without unnecessary complexity or overengineering. Include pseudo-code, implementation details, and test strategy for each task. Find the most up to date information to implement each task.
-Assign sequential IDs starting from ${nextId}. Infer title, description, details, and test strategy for each task based *only* on the PRD content.
-Set status to 'pending', dependencies to an empty array [], and priority to 'medium' initially for all tasks.
-Respond ONLY with a valid JSON object containing a single key "tasks", where the value is an array of task objects adhering to the provided Zod schema. Do not include any explanation or markdown formatting.
+分析提供的PRD内容并生成大约${numTasks}个顶级开发任务。如果PRD的复杂性或详细程度很高，请根据PRD的复杂性生成更多任务。
+每个任务应该代表实现需求所需的逻辑工作单元，并专注于实现需求的最直接有效的方式，避免不必要的复杂性或过度工程化。为每个任务包含伪代码、实现细节和测试策略。找到实现每个任务的最新信息。
+从${nextId}开始分配连续ID。仅基于PRD内容推断每个任务的标题、描述、详细信息和测试策略。
+将所有任务的状态设置为'pending'，依赖关系设置为空数组[]，优先级初始设置为'medium'。
+仅响应包含单个键"tasks"的有效JSON对象，其值是符合提供的Zod架构的任务对象数组。不要包含任何解释或markdown格式。
 
-Each task should follow this JSON structure:
+每个任务应遵循此JSON结构：
 {
 	"id": number,
 	"title": string,
 	"description": string,
 	"status": "pending",
-	"dependencies": number[] (IDs of tasks this depends on),
+	"dependencies": number[] (此任务依赖的任务ID),
 	"priority": "high" | "medium" | "low",
-	"details": string (implementation details),
-	"testStrategy": string (validation approach)
+	"details": string (实现细节),
+	"testStrategy": string (验证方法)
 }
 
-Guidelines:
-1. Unless complexity warrants otherwise, create exactly ${numTasks} tasks, numbered sequentially starting from ${nextId}
-2. Each task should be atomic and focused on a single responsibility following the most up to date best practices and standards
-3. Order tasks logically - consider dependencies and implementation sequence
-4. Early tasks should focus on setup, core functionality first, then advanced features
-5. Include clear validation/testing approach for each task
-6. Set appropriate dependency IDs (a task can only depend on tasks with lower IDs, potentially including existing tasks with IDs less than ${nextId} if applicable)
-7. Assign priority (high/medium/low) based on criticality and dependency order
-8. Include detailed implementation guidance in the "details" field${research ? ', with specific libraries and version recommendations based on your research' : ''}
-9. If the PRD contains specific requirements for libraries, database schemas, frameworks, tech stacks, or any other implementation details, STRICTLY ADHERE to these requirements in your task breakdown and do not discard them under any circumstance
-10. Focus on filling in any gaps left by the PRD or areas that aren't fully specified, while preserving all explicit requirements
-11. Always aim to provide the most direct path to implementation, avoiding over-engineering or roundabout approaches${research ? '\n12. For each task, include specific, actionable guidance based on current industry standards and best practices discovered through research' : ''}`;
+指导原则：
+1. 除非复杂性要求，否则创建确切的${numTasks}个任务，从${nextId}开始连续编号
+2. 每个任务应该是原子性的，专注于单一职责，遵循最新的最佳实践和标准
+3. 逻辑排序任务 - 考虑依赖关系和实现顺序
+4. 早期任务应专注于设置、核心功能优先，然后是高级功能
+5. 为每个任务包含清晰的验证/测试方法
+6. 设置适当的依赖ID（任务只能依赖于ID较低的任务，如果适用，可能包括ID小于${nextId}的现有任务）
+7. 根据关键性和依赖顺序分配优先级（high/medium/low）
+8. 在"details"字段中包含详细的实现指导${research ? '，基于研究提供具体的库和版本推荐' : ''}
+9. 如果PRD包含对库、数据库架构、框架、技术栈或任何其他实现细节的具体要求，严格遵守这些要求在任务分解中，绝不在任何情况下丢弃它们
+10. 专注于填补PRD留下的任何空白或未完全指定的区域，同时保留所有明确要求
+11. 始终旨在提供最直接的实现路径，避免过度工程化或迂回方法${research ? '\n12. 对于每个任务，基于通过研究发现的当前行业标准和最佳实践包含具体、可操作的指导' : ''}`;
 
 		// Build user prompt with PRD content
-		const userPrompt = `Here's the Product Requirements Document (PRD) to break down into approximately ${numTasks} tasks, starting IDs from ${nextId}:${research ? '\n\nRemember to thoroughly research current best practices and technologies before task breakdown to provide specific, actionable implementation details.' : ''}\n\n${prdContent}\n\n
-
-		Return your response in this format:
+		const userPrompt = `这是需要分解为大约${numTasks}个任务的产品需求文档（PRD），起始ID从${nextId}开始：${research ? '\n\n记住在任务分解之前彻底研究当前最佳实践和技术，以提供具体、可操作的实现细节。' : ''}\n\n${prdContent}\n\n请按以下格式返回响应：
 {
     "tasks": [
         {
             "id": 1,
-            "title": "Setup Project Repository",
+            "title": "设置项目仓库",
             "description": "...",
             ...
         },
         ...
     ],
     "metadata": {
-        "projectName": "PRD Implementation",
+        "projectName": "PRD实现",
         "totalTasks": ${numTasks},
         "sourceFile": "${prdPath}",
         "generatedAt": "YYYY-MM-DD"

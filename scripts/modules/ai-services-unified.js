@@ -246,6 +246,7 @@ function _resolveApiKey(providerName, session, projectRoot = null) {
 		ollama: 'OLLAMA_API_KEY',
 		bedrock: 'AWS_ACCESS_KEY_ID',
 		vertex: 'GOOGLE_API_KEY',
+		bailian: 'BAILIAN_API_KEY',
 		'claude-code': 'CLAUDE_CODE_API_KEY' // Not actually used, but included for consistency
 	};
 
@@ -813,5 +814,6 @@ export {
 	generateTextService,
 	streamTextService,
 	generateObjectService,
-	logAiUsage
+	logAiUsage,
+	PROVIDERS
 };

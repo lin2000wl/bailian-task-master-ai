@@ -15,7 +15,7 @@ console.log('1️⃣  测试基础类结构...');
 class TestBailianProvider {
   constructor() {
     this.name = 'Bailian';
-    this.baseURL = 'http://dashscope.aliyuncs.com/compatible-mode/v1';
+    this.baseURL = 'https://dashscope.aliyuncs.com/compatible-mode/v1';
   }
 
   validateAuth(params) {

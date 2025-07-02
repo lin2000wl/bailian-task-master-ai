@@ -10,7 +10,8 @@ export const VALIDATED_PROVIDERS = [
 	'google',
 	'perplexity',
 	'xai',
-	'mistral'
+	'mistral',
+	'bailian'
 ];
 
 // Custom providers object for easy named access
@@ -20,7 +21,8 @@ export const CUSTOM_PROVIDERS = {
 	BEDROCK: 'bedrock',
 	OPENROUTER: 'openrouter',
 	OLLAMA: 'ollama',
-	CLAUDE_CODE: 'claude-code'
+	CLAUDE_CODE: 'claude-code',
+	BAILIAN: 'bailian'
 };
 
 // Custom providers array (for backward compatibility and iteration)
